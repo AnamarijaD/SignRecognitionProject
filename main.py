@@ -427,42 +427,40 @@ def main():
     x_test_tt = np.asarray([img_to_array(array_to_img(im, scale=True).resize((48,48))) for im in x_test_t])/225
     x_train_tt.shape, x_test_tt.shape
 
-    model = nn.Sequential()
-
     x_train_rgb = torch.cat([x_train] * 3, dim=1)
     x_test_rgb = torch.cat([x_test] * 3, dim=1)
 
-    def evaluate_test_by_batch(model, testing_dataloader, device=DEVICE):
-    # Initializing the counter for accuracy
-        accuracy_test = 0
-        # Initializing a list for storing predictions
-        test_predictions = []
-        # Setting the model to the evaluation model
-        model.eval()
-        # Computing accuracy and predictions
-        with torch.no_grad():
-            for x_batch, y_batch in testing_dataloader:
-                # Moving data to GPU
-                x_batch, y_batch = x_batch.to(device), y_batch.to(device)
-                # Computing predictions for the batch
-                test_batch_predictions = torch.argmax(model(x_batch), dim=1)
-                # Adding the batch predictions to the prediction list
-                test_predictions.append(test_batch_predictions)
-                # Computing the test accuracy
-                is_correct = (test_batch_predictions == y_batch).float()
-                accuracy_test += is_correct.sum().cpu()
+    # def evaluate_test_by_batch(model, testing_dataloader, device=DEVICE):
+    # # Initializing the counter for accuracy
+    #     accuracy_test = 0
+    #     # Initializing a list for storing predictions
+    #     test_predictions = []
+    #     # Setting the model to the evaluation model
+    #     model.eval()
+    #     # Computing accuracy and predictions
+    #     with torch.no_grad():
+    #         for x_batch, y_batch in testing_dataloader:
+    #             # Moving data to GPU
+    #             x_batch, y_batch = x_batch.to(device), y_batch.to(device)
+    #             # Computing predictions for the batch
+    #             test_batch_predictions = torch.argmax(model(x_batch), dim=1)
+    #             # Adding the batch predictions to the prediction list
+    #             test_predictions.append(test_batch_predictions)
+    #             # Computing the test accuracy
+    #             is_correct = (test_batch_predictions == y_batch).float()
+    #             accuracy_test += is_correct.sum().cpu()
         
-        # Transforming a list of tensors into one tensor
-        test_predictions_tensor = torch.cat(test_predictions).cpu()
-        # Finishing computing test accuracy
-        accuracy_test /= len(testing_dataloader.dataset)
+    #     # Transforming a list of tensors into one tensor
+    #     test_predictions_tensor = torch.cat(test_predictions).cpu()
+    #     # Finishing computing test accuracy
+    #     accuracy_test /= len(testing_dataloader.dataset)
         
-        return accuracy_test, test_predictions_tensor
+    #     return accuracy_test, test_predictions_tensor
     
-    accuracy_test, predictions_test = evaluate_test_by_batch(
-        model=sign_mnist_classifier, testing_dataloader=testing_dataloader
-    )
-    print(f"Test accuracy: {accuracy_test:.4f}")
+    # accuracy_test, predictions_test = evaluate_test_by_batch(
+    #     model=sign_mnist_classifier, testing_dataloader=testing_dataloader
+    # )
+    # print(f"Test accuracy: {accuracy_test:.4f}")
 
 
 if __name__ == "__main__":
