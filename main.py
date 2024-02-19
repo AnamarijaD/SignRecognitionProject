@@ -113,7 +113,7 @@ def main():
     # for i, (data, label) in itertools.islice(enumerate(training_dataset), 10):
     #     ax = fig.add_subplot(2, 5, i + 1)
     #     ax.set_xticks([]); ax.set_yticks([])
-    #     ax.imshow(data.numpy().reshape(28, 28), cmap='gray_r')
+    #     ax.imshow(data.numpy().reshape(28, 28), cmap='gray_validation_dataset = Subset(sign_lang_mnist_dataset, torch.arange(10000))r')
     #     ax.set_title(f'True label = {int(label)}', size=15)
     # plt.suptitle("Training dataset examples", fontsize=20)
     # plt.tight_layout()
@@ -407,28 +407,27 @@ def main():
     # sign_mnist_classifier_dict = torch.load("SignMNIST_Classification_Model_Dict")
     sign_mnist_classifier = torch.load("SignMNIST_Classification_Model_CNN")
 
-    # def create_model_using_vgg16():
-    batch_size = 128
-    num_classes = 24
-    epochs = 50
+    # batch_size = 128
+    # num_classes = 24
+    # epochs = 50
 
-    x_train = x_train / 255
-    x_test = x_test / 255
+    # x_train = x_train / 255
+    # x_test = x_test / 255
 
-    x_train_t = np.stack([x_train.reshape(x_train.shape[0],28,28)]*3, axis=3).reshape(x_train.shape[0],28,28,3)
-    x_test_t = np.stack([x_test.reshape(x_test.shape[0],28,28)]*3, axis=3).reshape(x_test.shape[0],28,28,3)
-    x_train_t.shape, x_test_t.shape
+    # x_train_t = np.stack([x_train.reshape(x_train.shape[0],28,28)]*3, axis=3).reshape(x_train.shape[0],28,28,3)
+    # x_test_t = np.stack([x_test.reshape(x_test.shape[0],28,28)]*3, axis=3).reshape(x_test.shape[0],28,28,3)
+    # x_train_t.shape, x_test_t.shape
 
-    x_train = x_train.reshape(x_train.shape[0], 28, 28, 1)
-    x_test = x_test.reshape(x_test.shape[0], 28, 28, 1)
+    # x_train = x_train.reshape(x_train.shape[0], 28, 28, 1)
+    # x_test = x_test.reshape(x_test.shape[0], 28, 28, 1)
 
-    from keras.preprocessing.image import img_to_array, array_to_img
-    x_train_tt = np.asarray([img_to_array(array_to_img(im, scale=True).resize((48,48))) for im in x_train_t])/225
-    x_test_tt = np.asarray([img_to_array(array_to_img(im, scale=True).resize((48,48))) for im in x_test_t])/225
-    x_train_tt.shape, x_test_tt.shape
+    # from keras.preprocessing.image import img_to_array, array_to_img
+    # x_train_tt = np.asarray([img_to_array(array_to_img(im, scale=True).resize((48,48))) for im in x_train_t])/225
+    # x_test_tt = np.asarray([img_to_array(array_to_img(im, scale=True).resize((48,48))) for im in x_test_t])/225
+    # x_train_tt.shape, x_test_tt.shape
 
-    x_train_rgb = torch.cat([x_train] * 3, dim=1)
-    x_test_rgb = torch.cat([x_test] * 3, dim=1)
+    # x_train_rgb = torch.cat([x_train] * 3, dim=1)
+    # x_test_rgb = torch.cat([x_test] * 3, dim=1)
 
     # def evaluate_test_by_batch(model, testing_dataloader, device=DEVICE):
     # # Initializing the counter for accuracy

@@ -11,6 +11,9 @@ import keras
 # from keras.applications import VGG16
 from keras.applications.vgg16 import preprocess_input, VGG16
 from torchvision import models, transforms
+from sklearn.model_selection import train_test_split
+
+from keras.preprocessing.image import img_to_array, array_to_img
 
 TEST_DATA_PATH = '/home/ana/Desktop/fx/siap/sign_language_detection/siap-project/data/sign_mnist_test.csv'
 RANDOM_SEED = 42
@@ -70,19 +73,18 @@ def evaluate_test_by_batch(model, testing_dataloader, device=DEVICE):
     return accuracy_test, test_predictions_tensor
 
 
-sign_mnist_classifier = torch.load("SignMNIST_Classification_Model_CNN")
+sign_mnist_classifier = torch.load("models/SignMNIST_Classification_Model_CNN")
 
-vgg16 = torch.load("VGG16")
+vgg16 = torch.load("models/VGG16")
 
 accuracy_test, predictions_test = evaluate_test_by_batch(
     model=sign_mnist_classifier, testing_dataloader=testing_dataloader
 )
-print('*****cnn model*****')
-print(f"Test accuracy: {accuracy_test:.4f}")
-# print(f"Predictions test: {predictions_test:.4f}")
-print('*****cnn model*****')
 
-from keras.preprocessing.image import img_to_array, array_to_img
+# print('*****cnn model*****')
+# print(f"Test accuracy: {accuracy_test:.4f}")
+# # print(f"Predictions test: {predictions_test:.4f}")
+# print('*****cnn model*****')
 
 testing_data = pd.read_csv(TEST_DATA_PATH)
 
@@ -98,5 +100,37 @@ x_test = np.stack([x_test.reshape(x_test.shape[0],28,28)]*3, axis=3).reshape(x_t
 
 x_test_tt = np.asarray([img_to_array(array_to_img(im, scale=True).resize((48,48))) for im in x_test])/225
 
-vgg16.evaluate(x_test_tt,y_test)
+# print('*****vgg16 model*****')
+# vgg16.evaluate(x_test_tt,y_test)
+# print('*****vgg16 model*****')
+
+ann = torch.load('models/ANN')
+
+testing_data = pd.read_csv(TEST_DATA_PATH)
+
+x_test= testing_data.iloc[:,1:]
+y_test=testing_data.iloc[:,0]
+
+# print('*****ann model*****')
+# ann.evaluate(x_test,y_test)
+# print('*****ann model*****')
+
+resNet = torch.load('models/RESNET')
+
+testing_data = pd.read_csv(TEST_DATA_PATH)
+
+test_x = testing_data.drop("label",axis=1)
+test_y= testing_data["label"]
+
+dev_x,blind_x ,dev_y, blind_y = train_test_split(test_x,test_y,test_size=.8,stratify=test_y)
+
+blind_x = blind_x.to_numpy()
+blind_x = blind_x.reshape(-1,28,28,1)
+
+test_classes= blind_y
+blind_y = pd.pandas.get_dummies(blind_y)
+
+print('*****resNet model*****')
+resNet.evaluate(blind_x,blind_y)
+print('*****resNet model*****')
 

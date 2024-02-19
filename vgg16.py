@@ -76,7 +76,7 @@ x_train_tt.shape
 
 model.fit(x_train_tt,y_train,epochs=5)
 
-torch.save(model, 'VGG16')
+torch.save(model, 'models/VGG16')
 
 x_test = testing_data.iloc[:,1:]
 y_test = testing_data.iloc[:,0]
